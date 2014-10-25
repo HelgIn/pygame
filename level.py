@@ -9,10 +9,10 @@ def create(background, ar):
     for row in ar:
         for col in row:
             if col == "g":
-                block = Platform("../ground.bmp", x, y)
+                block = Platform("ground.bmp", x, y)
                 #background.blit(block, (x, y))
             if col == "t":
-                block = Platform("../grass.bmp", x, y)                
+                block = Platform("gr1.bmp", x, y)
                 #background.blit(block, (x, y))
             entities.add(block)
             x += block.get_width()

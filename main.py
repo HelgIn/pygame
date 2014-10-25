@@ -3,13 +3,10 @@
 import pygame
 from pygame.locals import *
 
-import Player
 from Player import *
-
-import level
 from level import *
-
 from Camera import *
+from npc import *
 
 WIN_WIDTH = 800
 WIN_HEIGHT = 600
@@ -19,10 +16,11 @@ BACKGROUND_COLOR = "#eeeeee"
 HERO_X = 55
 HERO_Y = 55
 
+
 def create_level(screen):
-    file = open("../level.txt", "r")
+    file = open("level.txt", "r")
     arFile = file.read().split("\n")
-    entities = level.create(screen, arFile)
+    entities = create(screen, arFile)
     level_width = len(arFile[0])
     level_height = len(arFile)
     return level_width, level_height, entities
@@ -37,7 +35,10 @@ def main():
     # create player
     player = Player(HERO_X, HERO_X) 
     left = right = up = down = False
-    
+
+    # create npc
+    npc = Npc(200, 120)
+
     # Fill background
     background = pygame.Surface(screen.get_size())    
     background.fill(Color(BACKGROUND_COLOR))             
@@ -48,7 +49,6 @@ def main():
     LEVEL_HEIGHT = arLevelSize[1] * 32
     
     entities = arLevelSize[2]
-    #entities.add(player)
     timer = time.Clock()    
    
     camera = Camera(LEVEL_WIDTH, LEVEL_HEIGHT) 
@@ -83,11 +83,8 @@ def main():
             if event.type == KEYUP and event.key == K_UP:
                 up = False
             if event.type == KEYUP and event.key == K_DOWN:
-                down = False                                        
-     
-        
-        
-        #screen.blit(background, camera.apply(background))  
+                down = False
+
         player.update(left, right, up, down)              
         
         camera.update(player)
@@ -96,6 +93,8 @@ def main():
             screen.blit(e.image, camera.apply(e))
                     
         player.draw(screen, camera)
+        npc.draw(screen, camera)
+
         display.flip()
 
 if __name__ == '__main__': main()
