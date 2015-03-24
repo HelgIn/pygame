@@ -10,36 +10,27 @@ COLOR = "#000000"
 
 
 class Player(sprite.Sprite):
-    def __init__(self, x, y):
+    def __init__(self, x, y, npc_list):
         sprite.Sprite.__init__(self)
-        self.xvel = 0
-        self.yvel = 0
-
-        self.startX = x
-        self.startY = y
+        self.start_x = x
+        self.start_y = y
         self.image = Surface((WIDTH, HEIGHT))
         self.image.fill(Color(COLOR))
         self.rect = Rect(x, y, WIDTH, HEIGHT)
+        self.npc_list = npc_list
 
-    def update(self, left, right, up, down):
-
-        if (left and (up or down)) or (right and (up or down)):
-            left = up = right = down = False
-        if left:
-            self.xvel = -MOVE_SPEED
-        if right:
-            self.xvel = MOVE_SPEED
-        if up:
-            self.yvel = -MOVE_SPEED
-        if down:
-            self.yvel = MOVE_SPEED
-        if not (left or right):
-            self.xvel = 0
-        if not (up or down):
-            self.yvel = 0
-
-        self.rect.x += self.xvel
-        self.rect.y += self.yvel
+    def update(self, dx, dy):
+        self.rect.x += dx
+        self.rect.y += dy
+        if self.rect.colliderect(self.npc_list):
+            if dx > 0:
+                self.rect.right = self.npc_list.rect.left
+            if dx < 0:
+                self.rect.left = self.npc_list.rect.right
+            if dy > 0:
+                self.rect.bottom = self.npc_list.rect.top
+            if dy < 0:
+                self.rect.top = self.npc_list.rect.bottom
 
     def draw(self, screen, camera):
         screen.blit(self.image, camera.apply(self))
