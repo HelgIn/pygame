@@ -1,6 +1,5 @@
 #!/usr/bin/python
 
-import pygame
 from pygame.locals import *
 
 from Player import *
@@ -35,33 +34,35 @@ def main():
    # create npc
     npc_list = []
     npc = Npc(200, 120)
+    npc1 = Npc(300, 160)
     npc_list.append(npc)
+    npc_list.append(npc1)
 
     # create player
-    player = Player(HERO_X, HERO_X, npc)
+    player = Player(HERO_X, HERO_X, npc_list)
 
     # Fill background
     background = pygame.Surface(screen.get_size())    
     background.fill(Color(BACKGROUND_COLOR))             
 
     #create level
-    arLevelSize = create_level(background)
-    LEVEL_WIDTH = arLevelSize[0] * 32
-    LEVEL_HEIGHT = arLevelSize[1] * 32
+    ar_level_size = create_level(background)
+    level_width = ar_level_size[0] * 32
+    level_height = ar_level_size[1] * 32
     
-    entities = arLevelSize[2]
+    entities = ar_level_size[2]
     timer = time.Clock()    
    
-    camera = Camera(LEVEL_WIDTH, LEVEL_HEIGHT) 
+    camera = Camera(level_width, level_height)
     
     while 1:
         timer.tick(240)
         
-        if player.rect.x + player.rect.width >= LEVEL_WIDTH:
+        if player.rect.x + player.rect.width >= level_width:
             right = False 
         if player.rect.x <= 0:
             left = False
-        if player.rect.y + player.rect.height >= LEVEL_HEIGHT:
+        if player.rect.y + player.rect.height >= level_height:
             down = False 
         if player.rect.y <= 0:
             up = False  
@@ -80,35 +81,6 @@ def main():
             player.update(0, -1)
         if key_press[pygame.K_DOWN]:
             player.update(0, 1)
-            # if event.type == KEYDOWN and event.key == K_RIGHT:
-        #         right = True
-        #     if event.type == KEYDOWN and event.key == K_LEFT:
-        #         left = True
-        #     if event.type == KEYDOWN and event.key == K_UP:
-        #         up = True
-        #     if event.type == KEYDOWN and event.key == K_DOWN:
-        #         down = True
-        #     if event.type == KEYUP and event.key == K_RIGHT:
-        #         right = False
-        #     if event.type == KEYUP and event.key == K_LEFT:
-        #         left = False
-        #     if event.type == KEYUP and event.key == K_UP:
-        #         up = False
-        #     if event.type == KEYUP and event.key == K_DOWN:
-        #         down = False
-        #
-        # if player.rect.colliderect(npc.rect):
-        #     player.is_moves = False
-        #     if up:
-        #         up = False
-        #     if down:
-        #         down = False
-        #     if left:
-        #         left = False
-        #     if right:
-        #         right = False
-
-        # player.update(left, right, up, down)
         
         camera.update(player)
         
@@ -116,7 +88,9 @@ def main():
             screen.blit(e.image, camera.apply(e))
                     
         player.draw(screen, camera)
-        npc.draw(screen, camera)
+
+        for npc in npc_list:
+            npc.draw(screen, camera)
 
         display.flip()
 

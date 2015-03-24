@@ -22,15 +22,16 @@ class Player(sprite.Sprite):
     def update(self, dx, dy):
         self.rect.x += dx
         self.rect.y += dy
-        if self.rect.colliderect(self.npc_list):
+        index = self.rect.collidelist(self.npc_list)
+        if index > -1:
             if dx > 0:
-                self.rect.right = self.npc_list.rect.left
+                self.rect.right = self.npc_list[index].rect.left
             if dx < 0:
-                self.rect.left = self.npc_list.rect.right
+                self.rect.left = self.npc_list[index].rect.right
             if dy > 0:
-                self.rect.bottom = self.npc_list.rect.top
+                self.rect.bottom = self.npc_list[index].rect.top
             if dy < 0:
-                self.rect.top = self.npc_list.rect.bottom
+                self.rect.top = self.npc_list[index].rect.bottom
 
     def draw(self, screen, camera):
         screen.blit(self.image, camera.apply(self))
